@@ -49,7 +49,7 @@ public class HandleExceptionController {
 	@ResponseStatus(code = HttpStatus.NOT_FOUND)
 	@ExceptionHandler(NotFoundException.class)
 	public Erro handleNotFound(NotFoundException exception){
-		return new Erro(exception.getMessage(), HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase());
+		return new Erro(exception.getMessage(), HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase());
 	}
 
 	@ResponseStatus(code = HttpStatus.CONFLICT)

@@ -17,6 +17,10 @@ public class UsuarioService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	public List<Usuario> getUsuarios() {
+		return usuarioRepository.findAll();
+	}
 
 	public List<Usuario> getUsuarioPorEmail(String email) {
 		List<Usuario> usuarios = usuarioRepository.findByEmail(email);
@@ -64,11 +68,20 @@ public class UsuarioService {
 	}
 	
 	public Usuario atualizar(Long id, Usuario usuario) {
-		Usuario usuarioConsultado = getUsuarioPorId(id);
-		usuarioConsultado.setEmail(usuario.getEmail());
-		usuarioConsultado.setBirthDate(usuario.getBirthDate());
-		usuarioConsultado.setCompanyId(usuario.getCompanyId());
+		List<Usuario> usuarios = usuarioRepository.findByEmail(usuario.getEmail());
+		long quantidadeUsuarios = usuarios.stream().filter(u -> u.getCompanyId().equals(usuario.getCompanyId())).count();
 		
-		return usuarioConsultado;
+		if(quantidadeUsuarios == 0L) {
+			Usuario usuarioConsultado = getUsuarioPorId(id);
+			usuarioConsultado.setEmail(usuario.getEmail());
+			usuarioConsultado.setBirthDate(usuario.getBirthDate());
+			usuarioConsultado.setCompanyId(usuario.getCompanyId());
+		
+		    return usuarioConsultado;
+		}
+		
+		throw new ConflictException("Usuário "+usuario.getEmail()+" já cadastrado nesta Companhia");
 	}
+
+	
 }

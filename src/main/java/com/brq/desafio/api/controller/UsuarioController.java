@@ -29,6 +29,12 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 	
+	@GetMapping
+	@JsonView(value = UsuarioView.DTO.class)
+	public ResponseEntity<List<Usuario>> getUsuarios() {
+		return ResponseEntity.ok(usuarioService.getUsuarios());
+	}
+	
 	@GetMapping("/email/{email}")
 	@JsonView(value = UsuarioView.DTO.class)
 	public ResponseEntity<List<Usuario>> getUsuarioPorEmail(@PathVariable String email) {
